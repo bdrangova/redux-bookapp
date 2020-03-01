@@ -1,0 +1,22 @@
+.card {
+  margin-bottom: 1rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: #dadada 1px solid;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.link {
+  margin-top: 2rem;
+  color: #5a6eda;
+}
+
+.category {
+  color: #505050;
+}

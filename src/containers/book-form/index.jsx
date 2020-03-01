@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createBook } from '../../actions';
+import style from './style.module.css';
 
 const CATEGORY = [
-  '',
+  'Category',
   'Action',
   'Biography',
   'History',
@@ -43,14 +44,24 @@ function BookForm({ createBook }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type='text' name='title' onChange={handleChange} />
-      <select name='category' onChange={handleChange}>
+    <form onSubmit={handleSubmit} className={style.form}>
+      <input
+        type='text'
+        name='title'
+        onChange={handleChange}
+        className={style.title}
+        placeholder='Book title...'
+      />
+      <select
+        name='category'
+        onChange={handleChange}
+        className={style.dropdown}
+      >
         {CATEGORY.map(item => (
           <option key={item}>{item}</option>
         ))}
       </select>
-      <input type='submit' value='Add Book' />
+      <input type='submit' value='Add Book' className={style.button} />
     </form>
   );
 }

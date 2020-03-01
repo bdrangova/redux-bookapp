@@ -1,6 +1,6 @@
 import { CHANGE_FILTER } from '../actions';
 
-const initialState = 'all';
+const initialState = 'All';
 
 function filterReducer(state = initialState, action) {
   const { filter, type } = action;

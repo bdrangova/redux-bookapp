@@ -3,37 +3,22 @@ import { connect } from 'react-redux';
 import { removeBook, filterBooks } from '../../actions';
 import Book from '../../components/book';
 import CategoryFilter from '../../components/category-filter';
+import style from './style.module.css';
 
 function BookList({ books, bookCategories, removeBook, filterBooks }) {
   const handleRemove = book => {
     removeBook(book);
   };
 
-  // const handleFilter = filter => {
-  //   filterBooks(filter);
-  // };
-
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map(book => (
-            <Book book={book} key={book.id} handleRemove={handleRemove} />
-          ))}
-        </tbody>
-      </table>
+    <div className={style.container}>
       <CategoryFilter
         bookCategories={bookCategories}
         handleFilter={filterBooks}
       />
+      {books.map(book => (
+        <Book book={book} key={book.id} handleRemove={handleRemove} />
+      ))}
     </div>
   );
 }
@@ -41,7 +26,7 @@ function BookList({ books, bookCategories, removeBook, filterBooks }) {
 const mapStateToProps = (state, props) => {
   return {
     books: state.books.filter(
-      book => book.category === state.filter || state.filter === 'all',
+      book => book.category === state.filter || state.filter === 'All',
     ),
     bookCategories: [...new Set(state.books.map(book => book.category))],
     filter: state.filter,
