@@ -15,10 +15,8 @@ const CATEGORY = [
 ];
 
 const INITIAL_STATE = {
-  values: {
-    title: '',
-    category: '',
-  },
+  values: {},
+  errors: {},
 };
 
 function BookForm({ createBook }) {
@@ -27,41 +25,87 @@ function BookForm({ createBook }) {
   const handleChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
-    let newState = formState;
-    newState.values[name] = value;
-    setFormState(newState);
+    let values = formState.values;
+    let errors = formState.errors;
+    values[name] = value;
+    errors[name] = '';
+    setFormState(prevState => {
+      return { ...prevState, values, errors };
+    });
+  };
+
+  const validate = formState => {
+    let noErrors = true;
+    let errors = {};
+    debugger;
+    const { values } = formState;
+    if (values.title === undefined || values.title === '') {
+      errors.title = 'Please enter a title.';
+      noErrors = false;
+    }
+    if (
+      values.category === undefined ||
+      values.category === '' ||
+      values.category === 'Category'
+    ) {
+      errors.category = 'Please pick a category.';
+      noErrors = false;
+    }
+    setFormState(prevState => {
+      return { ...prevState, errors };
+    });
+    return noErrors;
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    const book = {
-      title: formState.values.title,
-      category: formState.values.category,
-    };
-    createBook(book);
-    setFormState(INITIAL_STATE);
-    e.target.reset();
+    if (validate(formState)) {
+      const book = {
+        title: formState.values.title,
+        category: formState.values.category,
+      };
+      createBook(book);
+      setFormState({
+        values: {},
+        errors: {},
+      });
+      e.target.reset();
+    } else {
+      return;
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className={style.form}>
-      <input
-        type='text'
-        name='title'
-        onChange={handleChange}
-        className={style.title}
-        placeholder='Book title...'
-      />
-      <select
-        name='category'
-        onChange={handleChange}
-        className={style.dropdown}
-      >
-        {CATEGORY.map(item => (
-          <option key={item}>{item}</option>
-        ))}
-      </select>
-      <input type='submit' value='Add Book' className={style.button} />
+      <div className={style.formGroupTitle}>
+        <input
+          type='text'
+          name='title'
+          onChange={handleChange}
+          className={style.title}
+          placeholder='Book title...'
+        />
+        <span className={style.errors} key='title'>
+          {formState.errors.title}
+        </span>
+      </div>
+      <div className={style.formGroupCategory}>
+        <select
+          name='category'
+          onChange={handleChange}
+          className={style.dropdown}
+        >
+          {CATEGORY.map(item => (
+            <option key={item}>{item}</option>
+          ))}
+        </select>
+        <span className={style.errors} key='category'>
+          {formState.errors.category}
+        </span>
+      </div>
+      <div className={style.buttonGroup}>
+        <input type='submit' value='Add Book' className={style.button} />
+      </div>
     </form>
   );
 }
